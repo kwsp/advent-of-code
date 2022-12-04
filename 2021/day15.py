@@ -12,6 +12,7 @@ for line in lines:
 T = TypeVar("T")
 Mat2d = list[list[T]]
 
+
 def _mat2d(Y: int, X: int, init_val=None) -> Mat2d:
     "Make a 2D mat of size (Y, X) with init_val"
     return [[init_val] * X for _ in range(Y)]
@@ -68,6 +69,7 @@ def shortest_path(mat: Mat2d[int], start_coord: tuple[int, int]):
 
     return distance, predecessor
 
+
 distance, predecessor = shortest_path(mat, (0, 0))
 print("Part 1:", distance[-1][-1])
 
@@ -78,7 +80,7 @@ def increment_list(l: list, _max=9):
     and wraps around max value of _max
     """
     return [(v % _max) + 1 for v in l]
-    
+
 
 def tile_mat(mat: Mat2d, N=5) -> Mat2d:
     htiled = []
@@ -95,7 +97,6 @@ def tile_mat(mat: Mat2d, N=5) -> Mat2d:
 
         htiled.append(curr_row)
 
-
     vtiled = []
     htiled_inc = [row for row in htiled]
     vtiled.extend(htiled_inc)
@@ -103,6 +104,7 @@ def tile_mat(mat: Mat2d, N=5) -> Mat2d:
         htiled_inc = [increment_list(row) for row in htiled_inc]
         vtiled.extend(htiled_inc)
     return vtiled
+
 
 tiled = tile_mat(mat)
 distance, predecessor = shortest_path(tiled, (0, 0))

@@ -50,7 +50,7 @@ def smarter_alg(n=10):
         counter[pair[0]] += cnt
         counter[pair[1]] += cnt
 
-    counts = [math.ceil(i/2) for i in counter.values()]
+    counts = [math.ceil(i / 2) for i in counter.values()]
     print(max(counts) - min(counts))
 
 

@@ -2,23 +2,31 @@ from math import sqrt, floor
 
 _inp = "target area: x=20..30, y=-10..-5"
 
+
 def parse_inp(inp):
-    target = tuple(tuple(int(v) for v in s.split("=")[1].split("..")) for s in inp.split(":")[1].split(","))
+    target = tuple(
+        tuple(int(v) for v in s.split("=")[1].split(".."))
+        for s in inp.split(":")[1].split(",")
+    )
     return target
+
 
 # find max number of x steps
 def get_x_inf_steps(target):
     return range(floor(sqrt(target[0][0] * 2)), floor(sqrt(target[0][1] * 2)) + 1)
+
 
 _target = parse_inp(_inp)
 _x_steps = get_x_inf_steps(_target)
 assert sum(range(_x_steps[0] + 1)) in range(*_target[0])
 assert sum(range(_x_steps[1] + 1)) in range(*_target[0])
 
+
 def get_max_y_height(target):
     init_y = -(min(target[1]) + 1)
     max_y = sum(range(init_y + 1))
     return max_y
+
 
 assert get_max_y_height(_target) == 45
 
@@ -69,7 +77,7 @@ def get_possible_y_fly_through(target):
 def get_all_pairs(target):
     possible_x = get_possible_x_fly_through(target)
     possible_y = get_possible_y_fly_through(target)
-    
+
     # cases where y and x both fly through target
     res = []
     for step, _x in possible_x.items():
@@ -86,6 +94,7 @@ def get_all_pairs(target):
 
     # res.extend(inf_step_pairs)
     return set(res)
+
 
 def check_pair(pair, target):
     # check x
