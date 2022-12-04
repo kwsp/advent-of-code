@@ -1,19 +1,20 @@
 with open("./day03.txt", "r") as fp:
     s = fp.read()
 
+
 def split(s: str):
     s = s.strip()
     n = len(s)
     assert n % 2 == 0
-    n = n//2
+    n = n // 2
     return s[:n], s[n:]
+
 
 def priority(c: str) -> int:
     i = ord(c)
-    if i in range(ord('a'), ord('z') + 1):
-        return i - ord('a') + 1
-    return i - ord('A') + 27
-
+    if i in range(ord("a"), ord("z") + 1):
+        return i - ord("a") + 1
+    return i - ord("A") + 27
 
 
 lines = [l for l in s.strip().split("\n")]
@@ -25,7 +26,7 @@ _sacks = [set(l) for l in lines]
 
 badge_types = []
 for i in range(0, len(sacks), 3):
-    sets = _sacks[i:i+3]
+    sets = _sacks[i : i + 3]
     _s = sets[0].intersection(sets[1])
     _s = _s.intersection(sets[2])
     assert len(_s) == 1
