@@ -1,11 +1,11 @@
 #include <algorithm>
-#include <numeric>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <vector>
 #include <cassert>
+#include <fstream>
+#include <iostream>
+#include <numeric>
+#include <sstream>
 #include <tuple>
+#include <vector>
 
 struct Move {
   int n, from, to;
@@ -39,13 +39,13 @@ struct Input {
 
     // Parse initial stack
     const auto nums = _stacks.back();
-    for (int i=0; i<nums.size(); i++) {
+    for (int i = 0; i < nums.size(); i++) {
       if (nums[i] == ' ')
         continue;
 
       std::string stack;
-      for (int j=_stacks.size()-2; j>=0; j--) {
-        if (_stacks[j][i]!= ' ')
+      for (int j = _stacks.size() - 2; j >= 0; j--) {
+        if (_stacks[j][i] != ' ')
           stack.push_back(_stacks[j][i]);
       }
 
@@ -54,24 +54,24 @@ struct Input {
   }
 };
 
-std::string get_res(const std::vector<std::string>& stacks) {
-  return std::accumulate(stacks.cbegin(), stacks.cend(), std::string{}, [](std::string s, const auto& stack) -> std::string {
-    s.push_back(stack.back());
-    return s; 
-  });
+std::string get_res(const std::vector<std::string> &stacks) {
+  return std::accumulate(stacks.cbegin(), stacks.cend(), std::string{},
+                         [](std::string s, const auto &stack) -> std::string {
+                           s.push_back(stack.back());
+                           return s;
+                         });
 };
 
-int main (int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   {
     // Part 1
     Input input("./day05.txt");
     auto stacks = input.stacks;
     auto moves = input.moves;
 
-    for (const auto& move : input.moves) {
-      auto& from = stacks[move.from];
-      auto& to = stacks[move.to];
+    for (const auto &move : input.moves) {
+      auto &from = stacks[move.from];
+      auto &to = stacks[move.to];
       int n = move.n;
       assert(from.size() >= n);
       while (n--) {
@@ -88,9 +88,9 @@ int main (int argc, char *argv[])
     auto stacks = input.stacks;
     auto moves = input.moves;
 
-    for (const auto& move : input.moves) {
-      auto& from = stacks[move.from];
-      auto& to = stacks[move.to];
+    for (const auto &move : input.moves) {
+      auto &from = stacks[move.from];
+      auto &to = stacks[move.to];
       int n = move.n;
       assert(from.size() >= n);
       to += from.substr(from.size() - n, n);
