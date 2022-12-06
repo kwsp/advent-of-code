@@ -1,11 +1,12 @@
 from collections import defaultdict
+
 with open("day15.txt") as fp:
     raw = fp.read().strip().split(",")
     data = [int(i) for i in raw]
 
 when = defaultdict(list)
 for i, k in enumerate(data):
-    when[k].append(i+1)
+    when[k].append(i + 1)
 
 i = len(data) + 1
 last_spoke = data[-1]

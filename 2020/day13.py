@@ -7,11 +7,13 @@ bid = [int(i) for i in bs if i != "x"]
 nt = min([(s + b - s % b, b) for b in bid], key=lambda x: x[0])
 print("Part 1:", (nt[0] - s) * nt[1])
 
+
 def find(ans, val, offset, incr):
     while True:
         if (ans + offset) % val == 0:
             return ans
         ans += incr
+
 
 buses = [[int(val), offset] for offset, val in enumerate(bs) if val != "x"]
 part2 = buses[0][0]
