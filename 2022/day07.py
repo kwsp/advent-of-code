@@ -28,7 +28,7 @@ class Dir:
         return hash(s)
 
     @property
-    def size(self):
+    def size(self) -> int:
         return sum(i.size for i in self.ls.values())
 
     def new_entry(self, s: str):
@@ -51,6 +51,7 @@ i = 0
 root = cwd = Dir("/", None, {})
 while i < N:
     line = lines[i]
+    i += 1
     toks = line.split()
     if toks[0] == "$":
         if toks[1] == "cd":
@@ -59,22 +60,17 @@ while i < N:
                 assert cwd.parent is not None
                 cwd = cwd.parent
             else:
-                try:
-                    cwd = cwd.ls[name]
-                except Exception as e:
-                    breakpoint()
+                cwd = cwd.ls[name]
                 assert isinstance(cwd, Dir)
-            i += 1
 
         elif toks[1] == "ls":
-            j = i + 1
+            j = i
             while j < N and not lines[j].startswith("$"):
                 j += 1
-            [cwd.new_entry(l) for l in lines[i + 1 : j]]
+            [cwd.new_entry(l) for l in lines[i:j]]
             i = j
 
         else:
-            breakpoint()
             raise ValueError()
 
 
@@ -91,8 +87,7 @@ def part1(d: Dir):
         s = d.size
         if s <= 100000:
             total_size += s
-        ds = d.ls_dir()
-        [walk_dir(d) for d in ds]
+        [walk_dir(dd) for dd in d.ls_dir()]
 
     walk_dir(d)
     return total_size
