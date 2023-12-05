@@ -38,7 +38,7 @@ func parseLine(line string) (Input, error) {
 }
 
 func loadInput() ([]Input, error) {
-	f, err := os.Open("day16_.txt")
+	f, err := os.Open("day16.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -86,8 +86,6 @@ func (s *Heap1) Pop() interface{} {
 	return x
 }
 
-func breakpoint() {}
-
 func main() {
 	inputs, err := loadInput()
 	if err != nil {
@@ -121,26 +119,15 @@ func main() {
 			shortest_distances[[2]string{neighbor, node}] = d
 		}
 	}
-	fmt.Println(shortest_distances)
 
-	{
-		bar := progressbar.Default(-1)
-
-		q1 := &Heap1{
-			State1{
-				released:  0,
-				workers:   []Worker{Worker{time: 26, node: "AA"}},
-				unvisited: worthy_nodes,
-			},
-		}
+	solution := func(q1 *Heap1) int {
+    bar := progressbar.Default(-1)
+		//bar := progressbar.NewOptions(-1,)
 
 		best_released := 0
 		for q1.Len() > 0 {
 			state := heap.Pop(q1).(State1)
 			bar.Add(len(state.unvisited))
-			fmt.Println(state)
-
-			breakpoint()
 
 			for _, tovisit := range state.unvisited {
 				for worker_i, worker := range state.workers {
@@ -153,11 +140,11 @@ func main() {
 
 					newreleased := state.released + nodes[tovisit]*newtime
 
-					best_released = max(best_released, newreleased)
-					//if newreleased > best_released {
-					//best_released = newreleased
-					//// bar. update description
-					//}
+					if newreleased > best_released {
+						best_released = newreleased
+						// bar. update description
+						bar.Describe(fmt.Sprintf("[Best so far = %v]", best_released))
+					}
 
 					if len(state.unvisited) > 1 {
 						new_unvisited := make([]string, 0, len(state.unvisited)-1)
@@ -167,7 +154,7 @@ func main() {
 							}
 						}
 
-						newworkers := []Worker{Worker{node: tovisit, time: newtime}}
+						newworkers := []Worker{{node: tovisit, time: newtime}}
 						for i, w := range state.workers {
 							if i != worker_i {
 								newworkers = append(newworkers, w)
@@ -187,10 +174,24 @@ func main() {
 		}
 
 		bar.Close()
-
-		fmt.Println("Part1 =", best_released)
+		return best_released
 	}
 
-	part2 := 0
+	part1 := solution(&Heap1{
+		State1{
+			released:  0,
+			workers:   []Worker{{time: 30, node: "AA"}},
+			unvisited: worthy_nodes,
+		},
+	})
+	fmt.Println("Part1 =", part1)
+
+	part2 := solution(&Heap1{
+		State1{
+			released:  0,
+			workers:   []Worker{{time: 26, node: "AA"}, {time: 26, node: "AA"}},
+			unvisited: worthy_nodes,
+		},
+	})
 	fmt.Println("Part2 =", part2)
 }
