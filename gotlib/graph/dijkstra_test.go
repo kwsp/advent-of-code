@@ -2,8 +2,9 @@ package graph
 
 import (
 	"container/heap"
-	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestPriorityQueue(t *testing.T) {
@@ -16,9 +17,7 @@ func TestPriorityQueue(t *testing.T) {
 
 	expected_order := []string{"A", "B", "C", "D"}
 	for _, expect := range expected_order {
-		if node := heap.Pop(pq).(HeapItem).node; node != expect {
-			t.Errorf(`Wrong order. Expected %v, got %v`, expect, node)
-		}
+		assert.Equal(t, expect, heap.Pop(pq).(HeapItem).node)
 	}
 
 	// Test random insersion
@@ -27,9 +26,7 @@ func TestPriorityQueue(t *testing.T) {
 	heap.Push(pq, HeapItem{distance: 4, node: "D"})
 	heap.Push(pq, HeapItem{distance: 3, node: "C"})
 	for _, expect := range expected_order {
-		if node := heap.Pop(pq).(HeapItem).node; node != expect {
-			t.Errorf(`Wrong order. Expected %v, got %v`, expect, node)
-		}
+		assert.Equal(t, expect, heap.Pop(pq).(HeapItem).node)
 	}
 
 	// Test stability
@@ -37,9 +34,7 @@ func TestPriorityQueue(t *testing.T) {
 	heap.Push(pq, HeapItem{distance: 2, node: "B"})
 	expected_order = []string{"A", "B"}
 	for _, expect := range expected_order {
-		if node := heap.Pop(pq).(HeapItem).node; node != expect {
-			t.Errorf(`Wrong order. Expected %v, got %v`, expect, node)
-		}
+		assert.Equal(t, expect, heap.Pop(pq).(HeapItem).node)
 	}
 }
 
@@ -51,12 +46,8 @@ func TestDijkstra(t *testing.T) {
 	}
 
 	sd, err := Dijkstra("A", map[string][]string{"A": {"B"}, "B": {"A"}}, get_distance)
-	if err != nil {
-		t.Errorf(`Error occured in Dijkstra: %v`, err)
-	}
-	if !reflect.DeepEqual(sd, map[string]int{"A": 0, "B": 1}) {
-		t.Error(`Wrong result`)
-	}
+	assert.Equal(t, nil, err)
+	assert.Equal(t, map[string]int{"A": 0, "B": 1}, sd)
 
 	sd, err = Dijkstra("A",
 		map[string][]string{
@@ -67,16 +58,7 @@ func TestDijkstra(t *testing.T) {
 		},
 		get_distance,
 	)
-	if err != nil {
-		t.Errorf(`Error occured in Dijkstra: %v`, err)
-	}
-	if !reflect.DeepEqual(sd, map[string]int{
-		"A": 0,
-		"B": 1,
-		"C": 2,
-		"D": 2,
-	}) {
-		t.Error(`Wrong result`)
-	}
+	assert.Equal(t, nil, err)
+	assert.Equal(t, map[string]int{"A": 0, "B": 1, "C": 2, "D": 2}, sd)
 
 }
