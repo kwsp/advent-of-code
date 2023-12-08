@@ -4,17 +4,17 @@ import (
 	"container/heap"
 )
 
-type HeapItem struct {
+type HeapItem[K comparable] struct {
 	distance int // distance
-	node     string
+	node     K
 }
-type Heap []HeapItem
+type Heap[K comparable] []HeapItem[K]
 
-func (h Heap) Len() int            { return len(h) }
-func (h Heap) Less(i, j int) bool  { return h[i].distance < h[j].distance }
-func (h Heap) Swap(i, j int)       { h[i], h[j] = h[j], h[i] }
-func (h *Heap) Push(x interface{}) { *h = append(*h, x.(HeapItem)) }
-func (h *Heap) Pop() interface{} {
+func (h Heap[K]) Len() int            { return len(h) }
+func (h Heap[K]) Less(i, j int) bool  { return h[i].distance < h[j].distance }
+func (h Heap[K]) Swap(i, j int)       { h[i], h[j] = h[j], h[i] }
+func (h *Heap[K]) Push(x interface{}) { *h = append(*h, x.(HeapItem[K])) }
+func (h *Heap[K]) Pop() interface{} {
 	old := *h
 	n := len(old)
 	x := old[n-1]
@@ -25,17 +25,17 @@ func (h *Heap) Pop() interface{} {
 // Dijkstra's Algorithm
 // Return the shortest distance from the start node to every other node.
 // get_distance is a function that returns the distance between a pair of edges
-func Dijkstra(start string, edges map[string][]string, get_distance func(string, string) int) (map[string]int, error) {
-	visited := map[string]bool{}
-	sd := make(map[string]int)
+func Dijkstra[K comparable](start K, edges map[K][]K, get_distance func(K, K) int) (map[K]int, error) {
+	visited := map[K]bool{}
+	sd := make(map[K]int) // shortest distances
 	var err error
 
 	// priority queue sorted by distance
-	tovisit := &Heap{}
-	heap.Push(tovisit, HeapItem{distance: 0, node: start})
+	tovisit := &Heap[K]{}
+	heap.Push(tovisit, HeapItem[K]{distance: 0, node: start})
 	sd[start] = 0
 	for len(*tovisit) > 0 {
-		curr := heap.Pop(tovisit).(HeapItem)
+		curr := heap.Pop(tovisit).(HeapItem[K])
 		visited[curr.node] = true
 		for _, neighbor := range edges[curr.node] {
 			if _, ok := visited[neighbor]; ok {
@@ -48,7 +48,7 @@ func Dijkstra(start string, edges map[string][]string, get_distance func(string,
 			} else {
 				sd[neighbor] = newdistance
 			}
-			heap.Push(tovisit, HeapItem{distance: sd[neighbor], node: neighbor})
+			heap.Push(tovisit, HeapItem[K]{distance: sd[neighbor], node: neighbor})
 
 		}
 	}

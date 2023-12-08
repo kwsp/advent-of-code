@@ -8,33 +8,33 @@ import (
 )
 
 func TestPriorityQueue(t *testing.T) {
-	pq := &Heap{}
+	pq := &Heap[string]{}
 	heap.Init(pq)
-	heap.Push(pq, HeapItem{distance: 1, node: "A"})
-	heap.Push(pq, HeapItem{distance: 2, node: "B"})
-	heap.Push(pq, HeapItem{distance: 3, node: "C"})
-	heap.Push(pq, HeapItem{distance: 4, node: "D"})
+	heap.Push(pq, HeapItem[string]{distance: 1, node: "A"})
+	heap.Push(pq, HeapItem[string]{distance: 2, node: "B"})
+	heap.Push(pq, HeapItem[string]{distance: 3, node: "C"})
+	heap.Push(pq, HeapItem[string]{distance: 4, node: "D"})
 
 	expected_order := []string{"A", "B", "C", "D"}
 	for _, expect := range expected_order {
-		assert.Equal(t, expect, heap.Pop(pq).(HeapItem).node)
+		assert.Equal(t, expect, heap.Pop(pq).(HeapItem[string]).node)
 	}
 
 	// Test random insersion
-	heap.Push(pq, HeapItem{distance: 2, node: "B"})
-	heap.Push(pq, HeapItem{distance: 1, node: "A"})
-	heap.Push(pq, HeapItem{distance: 4, node: "D"})
-	heap.Push(pq, HeapItem{distance: 3, node: "C"})
+	heap.Push(pq, HeapItem[string]{distance: 2, node: "B"})
+	heap.Push(pq, HeapItem[string]{distance: 1, node: "A"})
+	heap.Push(pq, HeapItem[string]{distance: 4, node: "D"})
+	heap.Push(pq, HeapItem[string]{distance: 3, node: "C"})
 	for _, expect := range expected_order {
-		assert.Equal(t, expect, heap.Pop(pq).(HeapItem).node)
+		assert.Equal(t, expect, heap.Pop(pq).(HeapItem[string]).node)
 	}
 
 	// Test stability
-	heap.Push(pq, HeapItem{distance: 2, node: "A"})
-	heap.Push(pq, HeapItem{distance: 2, node: "B"})
+	heap.Push(pq, HeapItem[string]{distance: 2, node: "A"})
+	heap.Push(pq, HeapItem[string]{distance: 2, node: "B"})
 	expected_order = []string{"A", "B"}
 	for _, expect := range expected_order {
-		assert.Equal(t, expect, heap.Pop(pq).(HeapItem).node)
+		assert.Equal(t, expect, heap.Pop(pq).(HeapItem[string]).node)
 	}
 }
 
