@@ -51,9 +51,9 @@ func (primes Primes) GetPrimeFactors(x int) []int {
 		if x%prime == 0 {
 			factors = append(factors, prime)
 			x /= prime
-		}
-		for x%prime == 0 {
-			x /= prime
+			for x%prime == 0 {
+				x /= prime
+			}
 		}
 	}
 	return factors
