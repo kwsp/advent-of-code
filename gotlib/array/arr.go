@@ -2,6 +2,14 @@ package array
 
 type Array[T int | int64 | float64] []T
 
+func (arr Array[T]) Sum() T {
+	var acc T
+	for _, v := range arr {
+		acc += v
+	}
+	return acc
+}
+
 // Diff returns the diff array and a bool indicating if
 // all values in the diff array are zeros
 func (arr Array[T]) Diff() (Array[T], bool) {
